@@ -1,7 +1,7 @@
 import logging
 import time
 
-from . import colour as c
+import scalyca.colour as c
 
 
 class Formatter(logging.Formatter):

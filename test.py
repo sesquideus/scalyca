@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from scalyca import Scalyca
+from scalyca import Scalyca, Scala
 
-s = Scalyca('Scalyca test')
 
+s = Scala()
 s.run()

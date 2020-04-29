@@ -2,8 +2,8 @@ import dotmap
 import yaml
 import logging
 
-from . import exceptions
-from . import colour as c
+import scalyca.exceptions
+import scalyca.colour as c
 
 log = logging.getLogger('root')
 
@@ -18,14 +18,14 @@ def load_YAML(file_object):
         log.error(f"YAML scanner error {e}")
         raise exceptions.ConfigurationError(e) from e
 
-    return dotmap.DotMap(config)
+    return dotmap.DotMap(config, _dynamic=True)
 
 
-def make_static(config):
-    for k in config._map:
-        if isinstance(config[k], dotmap.DotMap):
-            make_static(config[k])
-        if isinstance(config[k], list):
-            for item in config[k]:
+def make_static(dm):
+    for k in dm._map:
+        if isinstance(dm[k], dotmap.DotMap):
+            make_static(dm[k])
+        if isinstance(dm[k], list):
+            for item in dm[k]:
                 make_static(item)
-        config._dynamic = False
+        dm._dynamic = False
