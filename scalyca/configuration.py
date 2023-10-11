@@ -2,8 +2,8 @@ import dotmap
 import yaml
 import logging
 
-import scalyca.exceptions
-import scalyca.colour as c
+from . import exceptions
+from . import colour as c
 
 log = logging.getLogger('root')
 

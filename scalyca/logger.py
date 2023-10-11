@@ -1,17 +1,17 @@
 import logging
 import time
 
-import scalyca.colour as c
+from . import colour as c
 
 
 class Formatter(logging.Formatter):
     def __init__(self, fmt, timefmt, fmtc):
         super().__init__(fmt, timefmt, fmtc)
 
-    def format(self, record):
+    def format(self, record) -> str:
         record.level = {
             'DEBUG':    c.debug,
-            'INFO':     c.none,
+            'INFO':     c.ok,
             'WARNING':  c.warn,
             'ERROR':    c.err,
             'CRITICAL': c.critical,
@@ -19,13 +19,13 @@ class Formatter(logging.Formatter):
 
         return super().format(record)
 
-    def formatTime(self, record, format):
+    def formatTime(self, record, format) -> str:
         ct = self.converter(record.created)
         return f"{time.strftime('%Y-%m-%d %H:%M:%S', ct)}.{int(record.msecs):03d}"
 
 
 def setupLog(name, *, output=None, fmt='{asctime} [{level}] {message}', timefmt='%Y-%m-%d %H:%M:%S', fmtc='{'):
-    formatter = Formatter(fmt='[{level}] {message}', timefmt=timefmt, fmtc=fmtc)
+    formatter = Formatter(fmt='[{level} {asctime}] {message}', timefmt=timefmt, fmtc=fmtc)
 
     if type(output) == str:
         handler = logging.FileHandler(output)
