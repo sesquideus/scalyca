@@ -11,37 +11,43 @@ from . import exceptions
 from . import logger
 from . import configuration
 
-log = logger.setupLog('root')
+log = logger.setup_log('root', timefmt='%Y-%m-%d')
 
 
-"""
-    Scala: Simple Console Application with Logging and Argparse
-"""
 class Scala():
+    """
+        Scala: Simple Console Application with Logging and Argparse
+    """
     app_name = "Default Scala"
     description = "Simple Configurable Application with Logging and Argparse"
+    prog = None
 
     def __init__(self, **kwargs):
         """ Optionally override the application name and description """
-        self.ok = True
+        self._ok = True
         self.description = kwargs.get('description', self.description)
         self.app_name = kwargs.get('app_name', self.app_name)
+        self.prog = kwargs.get('app_name', self.prog)
 
-    def initialize(self):
-        self.create_argparser()
-        self.add_default_arguments()
+        self._argparser = None
+
+    def _initialize(self):
+        self._argparser = argparse.ArgumentParser(
+            prog=self.prog,
+            description=self.description
+        )
+        self._add_default_arguments()
         self.add_arguments()
 
-        self.args = self.argparser.parse_args()
+        self.args = self._argparser.parse_args()
         self.override_configuration()
-        self.ok = False
 
-    def create_argparser(self):
-        self.argparser = argparse.ArgumentParser(description=self.description)
+    def add_argument(self, *args, **kwargs):
+        self._argparser.add_argument(*args, **kwargs)
 
-    def add_default_arguments(self):
-        self.argparser.add_argument('-l', '--logfile', type=argparse.FileType('w'), help="Write log to file", default=sys.stdout)
-        self.argparser.add_argument('-d', '--debug', action='store_true', help="Turn on verbose logging")
+    def _add_default_arguments(self):
+        self.add_argument('-l', '--logfile', type=argparse.FileType('w'), help="Write log to file", default=sys.stdout)
+        self.add_argument('-d', '--debug', action='store_true', help="Turn on verbose logging")
 
     @abstractmethod
     def add_arguments(self):
@@ -52,19 +58,19 @@ class Scala():
 
     def run(self):
         try:
-            self.initialize()
+            self._initialize()
             self.main()
-            self.finalize()
+            self._finalize()
         except exceptions.PrerequisiteError as e:
             log.error(f"Terminating due to missing prerequisites: {e}")
         except exceptions.ConfigurationError as e:
             log.error(f"Terminating due to a configuration error: {e}")
         finally:
-            if not self.ok:
+            if not self._ok:
                 log.critical(f"{c.script(self.app_name)} aborted during runtime")
 
-    def finalize(self):
-        self.ok = True
+    def _finalize(self):
+        self._ok = True
 
     def override_configuration(self):
         log.setLevel(logging.DEBUG if self.args.debug else logging.INFO)

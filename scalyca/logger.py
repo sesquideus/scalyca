@@ -24,10 +24,10 @@ class Formatter(logging.Formatter):
         return f"{time.strftime('%Y-%m-%d %H:%M:%S', ct)}.{int(record.msecs):03d}"
 
 
-def setupLog(name, *, output=None, fmt='{asctime} [{level}] {message}', timefmt='%Y-%m-%d %H:%M:%S', fmtc='{'):
-    formatter = Formatter(fmt='[{level} {asctime}] {message}', timefmt=timefmt, fmtc=fmtc)
+def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt='%Y-%m-%d %H:%M:%S', fmtc='{'):
+    formatter = Formatter(fmt=fmt, timefmt=timefmt, fmtc=fmtc)
 
-    if type(output) == str:
+    if isinstance(output, str):
         handler = logging.FileHandler(output)
     else:
         handler = logging.StreamHandler()

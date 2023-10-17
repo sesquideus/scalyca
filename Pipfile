@@ -8,12 +8,13 @@ dotmap = "*"
 pyyaml = "*"
 colorama = "*"
 schema = "*"
-wheel = "*"
+pathlib = "*"
 
 [dev-packages]
 setuptools = "*"
 twine = "*"
 pytest = "*"
+build = "*"
 
 [requires]
 python_version = "3.12"
