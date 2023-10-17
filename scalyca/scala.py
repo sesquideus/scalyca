@@ -11,7 +11,7 @@ from . import exceptions
 from . import logger
 from . import configuration
 
-log = logger.setup_log('root', timefmt='%Y-%m-%d')
+log = logger.setup_log('root', timefmt='%H:%M:%S')
 
 
 class Scala():
@@ -46,7 +46,7 @@ class Scala():
         self._argparser.add_argument(*args, **kwargs)
 
     def _add_default_arguments(self):
-        self.add_argument('-l', '--logfile', type=argparse.FileType('w'), help="Write log to file", default=sys.stdout)
+        self.add_argument('-l', '--logfile', type=argparse.FileType('w'), help="Write log to file")
         self.add_argument('-d', '--debug', action='store_true', help="Turn on verbose logging")
 
     @abstractmethod

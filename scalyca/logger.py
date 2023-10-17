@@ -21,11 +21,11 @@ class Formatter(logging.Formatter):
 
     def formatTime(self, record, format) -> str:
         ct = self.converter(record.created)
-        return f"{time.strftime('%Y-%m-%d %H:%M:%S', ct)}.{int(record.msecs):03d}"
+        return f"{time.strftime(format, ct)}.{int(record.msecs):03d}"
 
 
-def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt='%Y-%m-%d %H:%M:%S', fmtc='{'):
-    formatter = Formatter(fmt=fmt, timefmt=timefmt, fmtc=fmtc)
+def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt='%Y-%m-%d %H:%M:%S'):
+    formatter = Formatter(fmt=fmt, timefmt=timefmt, fmtc='{')
 
     if isinstance(output, str):
         handler = logging.FileHandler(output)
