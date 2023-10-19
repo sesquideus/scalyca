@@ -80,8 +80,10 @@ class Scala(metaclass=abc.ABCMeta):
             self._finalize()
         except exceptions.PrerequisiteError as e:
             log.error(f"Terminating due to missing prerequisites: {e}")
+            raise Exception from e
         except exceptions.ConfigurationError as e:
             log.error(f"Terminating due to a configuration error: {e}")
+            raise Exception from e
         finally:
             if self._ok:
                 log.info(self._success_message)

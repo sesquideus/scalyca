@@ -1,3 +1,4 @@
+import abc
 import argparse
 import dotmap
 import logging
@@ -14,7 +15,7 @@ from . import colour as c
 log = logging.getLogger("root")
 
 
-class Scalyca(scala.Scala):
+class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
     """
         Simple Console Application with Logging, Yaml Configuration and Argparse
     """
@@ -38,13 +39,13 @@ class Scalyca(scala.Scala):
             self._validate_configuration()
 
         except exceptions.FatalError:
-            log.critical(f"{c.script(self.app_name)} aborting during configuration")
+            log.critical(f"{c.script(self._app_name)} aborting during configuration")
             sys.exit(-1)
 
     def _load_configuration(self):
         raw = configuration.load_YAML(self.args.config)
         self.config = dotmap.DotMap(raw, _dynamic=True)
-        log.info(f"Configuration read from {c.path(self.args.config.name)}")
+        log.debug(f"Configuration read from {c.path(self.args.config.name)}")
 
     def _lock_configuration(self):
         log.debug(f"Locking the configuration")
