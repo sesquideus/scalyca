@@ -3,7 +3,6 @@ import yaml
 import logging
 
 from . import exceptions
-from . import colour as c
 
 log = logging.getLogger('root')
 
