@@ -33,7 +33,7 @@ def critical(what):
 
 
 def path(what):
-    return colour(what, Fore.LIGHTRED_EX)
+    return colour(what, Fore.LIGHTMAGENTA_EX)
 
 
 def name(what):
@@ -45,7 +45,7 @@ def over(what):
 
 
 def script(what):
-    return colour(what, Fore.LIGHTMAGENTA_EX)
+    return colour(what, Fore.LIGHTGREEN_EX)
 
 
 def param(what):

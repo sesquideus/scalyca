@@ -20,7 +20,6 @@ class Scala(metaclass=abc.ABCMeta):
     _app_name = "Default Scala"
     _description = "Simple Configurable Application with Logging and Argparse"
     _prog = "Scala"
-    _success_message = f"{c.script(_prog)} finished successfully"
 
     def __init__(self, **kwargs):
         """ Optionally override the application name and description """
@@ -28,7 +27,7 @@ class Scala(metaclass=abc.ABCMeta):
         self._description = kwargs.get('description', self._description)
         self._app_name = kwargs.get('app_name', self._app_name)
         self._prog = kwargs.get('app_name', self._prog)
-        self._success_message = kwargs.get('success_message', self._success_message)
+        self._success_message = kwargs.get('success_message', f"{c.script(self._app_name)} finished successfully")
 
         self._argparser = None
 
@@ -56,6 +55,9 @@ class Scala(metaclass=abc.ABCMeta):
         self.add_argument('-l', '--logfile', type=argparse.FileType('w'), help="Write log to file")
         self.add_argument('-d', '--debug', action='store_true', help="Turn on verbose logging")
 
+    def initialize(self):
+        """ Custom initialization. Might be empty. """
+
     @abc.abstractmethod
     def main(self):
         """
@@ -76,14 +78,13 @@ class Scala(metaclass=abc.ABCMeta):
     def run(self):
         try:
             self._initialize()
+            self.initialize()
             self.main()
             self._finalize()
         except exceptions.PrerequisiteError as e:
             log.error(f"Terminating due to missing prerequisites: {e}")
-            raise Exception from e
         except exceptions.ConfigurationError as e:
             log.error(f"Terminating due to a configuration error: {e}")
-            raise Exception from e
         finally:
             if self._ok:
                 log.info(self._success_message)

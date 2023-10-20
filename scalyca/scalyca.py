@@ -34,6 +34,7 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
         try:
             self._load_configuration()
             self._override_configuration()
+            self.override_configuration()
             self._lock_configuration()
             self._debug_configuration()
             self._validate_configuration()

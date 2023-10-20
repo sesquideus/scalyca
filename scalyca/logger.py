@@ -5,9 +5,6 @@ from . import colour as c
 
 
 class Formatter(logging.Formatter):
-    def __init__(self, fmt, timefmt, fmtc):
-        super().__init__(fmt, timefmt, fmtc)
-
     def format(self, record) -> str:
         record.level = {
             'DEBUG':    c.debug,
@@ -16,7 +13,6 @@ class Formatter(logging.Formatter):
             'ERROR':    c.err,
             'CRITICAL': c.critical,
         }[record.levelname](record.levelname[:3])
-
         return super().format(record)
 
     def formatTime(self, record, format) -> str:
@@ -24,8 +20,20 @@ class Formatter(logging.Formatter):
         return f"{time.strftime(format, ct)}.{int(record.msecs):03d}"
 
 
+class ShortFormatter(Formatter):
+    def format(self, record) -> str:
+        record.asctime = {
+            'DEBUG':    c.debug,
+            'INFO':     c.ok,
+            'WARNING':  c.warn,
+            'ERROR':    c.err,
+            'CRITICAL': c.critical,
+        }[record.levelname](record.created)
+        return super().format(record)
+
+
 def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt='%Y-%m-%d %H:%M:%S'):
-    formatter = Formatter(fmt=fmt, timefmt=timefmt, fmtc='{')
+    formatter = ShortFormatter('[{asctime}] {message}', timefmt, '{')
 
     if isinstance(output, str):
         handler = logging.FileHandler(output)
