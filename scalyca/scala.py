@@ -1,14 +1,11 @@
 import abc
 import argparse
-import dotmap
 import logging
 import yaml
-import sys
 
 from . import colour as c
 from . import exceptions
 from . import logger
-from . import configuration
 
 log = logger.setup_log('root', timefmt='%H:%M:%S')
 
@@ -56,7 +53,8 @@ class Scala(metaclass=abc.ABCMeta):
         self.add_argument('-d', '--debug', action='store_true', help="Turn on verbose logging")
 
     def initialize(self):
-        """ Custom initialization. Might be empty. """
+        """ Custom initialization routines. Might remain empty. """
+        pass
 
     @abc.abstractmethod
     def main(self):
