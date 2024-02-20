@@ -38,6 +38,7 @@ class Scala(metaclass=abc.ABCMeta):
         self.args = self._argparser.parse_args()
 
         self._configure()
+        self._override_configuration()
 
     def add_argument(self, *args, **kwargs):
         """ Just a public wrapper so that we do not have to access _argparser directly """
@@ -68,6 +69,7 @@ class Scala(metaclass=abc.ABCMeta):
 
     def _override_configuration(self):
         log.setLevel(logging.DEBUG if self.args.debug else logging.INFO)
+        log.debug(f"{c.script(self._prog)} debug mode on")
 
         if self.args.logfile:
             log.addHandler(logging.FileHandler(self.args.logfile.name))
@@ -81,8 +83,10 @@ class Scala(metaclass=abc.ABCMeta):
             self._finalize()
         except exceptions.PrerequisiteError as e:
             log.error(f"Terminating due to missing prerequisites: {e}")
+            self._ok = False
         except exceptions.ConfigurationError as e:
             log.error(f"Terminating due to a configuration error: {e}")
+            self._ok = False
         finally:
             if self._ok:
                 log.info(self._success_message)
