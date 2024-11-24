@@ -11,10 +11,10 @@ log = logging.getLogger("root")
 
 
 class ScalycaShowcase(Scalyca):
-    _app_name = "Scalyca showcase"
     _description = "A very simple SCALYCA showcase"
     _prog = "Scalyca showcase"
-    schema = Schema({
+    _version = "1.0"
+    _schema = Schema({
         'name': Or('foo', 'bar', 'baz', 'qux'),
         'kittens': int,
         'hungry': bool,
@@ -26,12 +26,12 @@ class ScalycaShowcase(Scalyca):
         self.add_argument('--hungry', action='store_true')
 
     def override_configuration(self):
-        self.override_with_warning(self.config.name, self.args.name, 'name')
-        self.override_with_warning(self.config.kittens, self.args.kittens, 'kittens')
-        self.override_with_warning(self.config.hungry, self.args.hungry, 'hungry')
+        self.config.name = self.args.name
+        self.config.kittens = self.args.kittens
+        self.config.hungry = self.args.hungry
 
     def main(self):
-        log.info(f"SCALYCA showcase running: cat '{c.param(self.config.name)}' has {c.param(self.config.kittens)} kittens "
+        log.info(f"{self._prog} running: cat '{c.param(self.config.name)}' has {c.param(self.config.kittens)} kittens "
                  f"and is {'' if self.config.hungry else 'not '}hungry")
         self.purr(self.args.kittens)
 

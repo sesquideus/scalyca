@@ -10,7 +10,8 @@ log = logging.getLogger("root")
 
 
 class ScalaShowcase(Scala):
-    _app_name = "SCALA showcase"
+    _prog = "SCALA showcase"
+    _version = "MEOW"
     _description = "A very simple SCALA showcase"
     _success_message = "Cat management finished successfully"
 
@@ -21,7 +22,8 @@ class ScalaShowcase(Scala):
         self.add_argument('--hungry', action='store_true')
 
     def main(self):
-        log.info(f"{c.script(self._app_name)} running: cat '{c.param(self.args.string)}' has {c.param(self.args.number)} kittens "
+        log.info(f"{c.script(self._prog)} running: "
+                 f"cat '{c.param(self.args.string)}' has {c.param(self.args.number)} kittens "
                  f"and is {'' if self.args.hungry else 'not '}hungry")
         self.purr(self.args.number)
 

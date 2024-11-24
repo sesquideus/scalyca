@@ -1,7 +1,6 @@
 import abc
 import argparse
 import logging
-import yaml
 
 from . import colour as c
 from . import exceptions
@@ -14,37 +13,36 @@ class Scala(metaclass=abc.ABCMeta):
     """
         Scala: Simple Console Application with Logging and Argparse
     """
-    _app_name = "Default Scala"
     _description = "Simple Configurable Application with Logging and Argparse"
     _prog = "Scala"
+    _version = "undefined"
 
     def __init__(self, **kwargs):
         """ Optionally override the application name and description """
-        self._ok = True
+        self._ok = False
         self._description = kwargs.get('description', self._description)
-        self._app_name = kwargs.get('app_name', self._app_name)
-        self._prog = kwargs.get('app_name', self._prog)
-        self._success_message = kwargs.get('success_message', f"{c.script(self._app_name)} finished successfully")
-
-        self._argparser = None
-
-    def _initialize(self):
+        self._prog = kwargs.get('prog', self._prog)
+        self._success_message = kwargs.get('success_message', f"{c.script(self._prog)} finished successfully"
+                                           )
         self._argparser = argparse.ArgumentParser(
             prog=self._prog,
             description=self._description
         )
+
+    def _initialize(self):
+        log.info(f"{c.script(self._prog)} (version {self._version}) starting")
         self._add_default_arguments()
         self.add_arguments()
         self.args = self._argparser.parse_args()
 
         self._configure()
         self._override_configuration()
+        self.initialize()
 
     def add_argument(self, *args, **kwargs):
         """ Just a public wrapper so that we do not have to access _argparser directly """
         self._argparser.add_argument(*args, **kwargs)
 
-    @abc.abstractmethod
     def add_arguments(self):
         """ Override this in your Scala derivative to add custom arguments """
 
@@ -55,6 +53,8 @@ class Scala(metaclass=abc.ABCMeta):
 
     def initialize(self):
         """ Custom initialization routines. Might remain empty. """
+
+    def _configure(self):
         pass
 
     @abc.abstractmethod
@@ -64,10 +64,11 @@ class Scala(metaclass=abc.ABCMeta):
         Provide an implementation in your derivative of Scala.
         """
 
-    def _configure(self):
-        pass
+    def finalize(self):
+        """ Override this in you Scala derivative to add custom finalization """
 
     def _override_configuration(self):
+        self.override_configuration()
         log.setLevel(logging.DEBUG if self.args.debug else logging.INFO)
         log.debug(f"{c.script(self._prog)} debug mode on")
 
@@ -75,10 +76,12 @@ class Scala(metaclass=abc.ABCMeta):
             log.addHandler(logging.FileHandler(self.args.logfile.name))
             log.debug(f"Added log output {c.path(self.args.logfile.name)}")
 
+    def override_configuration(self):
+        """ Custom override hook for overriding the configuration """
+
     def run(self):
         try:
             self._initialize()
-            self.initialize()
             self.main()
             self._finalize()
         except exceptions.PrerequisiteError as e:
@@ -91,7 +94,8 @@ class Scala(metaclass=abc.ABCMeta):
             if self._ok:
                 log.info(self._success_message)
             else:
-                log.critical(f"{c.script(self._app_name)} aborted during runtime")
+                log.critical(f"{c.script(self._prog)} aborted during runtime")
 
     def _finalize(self):
+        self.finalize()
         self._ok = True

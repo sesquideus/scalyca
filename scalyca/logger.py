@@ -1,5 +1,6 @@
 import logging
 import time
+import sys
 
 from . import colour as c
 
@@ -15,9 +16,9 @@ class Formatter(logging.Formatter):
         }[record.levelname](record.levelname[:3])
         return super().format(record)
 
-    def formatTime(self, record, format) -> str:
+    def formatTime(self, record, datefmt) -> str:
         ct = self.converter(record.created)
-        return f"{time.strftime(format, ct)}.{int(record.msecs):03d}"
+        return f"{time.strftime(datefmt, ct)}.{int(record.msecs):03d}"
 
 
 class ShortFormatter(Formatter):
@@ -38,7 +39,7 @@ def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt
     if isinstance(output, str):
         handler = logging.FileHandler(output)
     else:
-        handler = logging.StreamHandler()
+        handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(formatter)
 
     log = logging.getLogger(name)

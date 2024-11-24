@@ -12,7 +12,7 @@ from . import configuration
 from . import colour as c
 
 
-log = logging.getLogger("root")
+log = logging.getLogger('root')
 
 
 class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
@@ -23,7 +23,7 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
     _description = "Simple Configurable Application with Logging, Yaml file Configuration and Argparse"
     # Config validation schema, or None to skip validation
     _prog = "Scalyca"
-    schema = None
+    _schema: schema.Schema | None = None
 
     def _add_default_arguments(self):
         """ Scalyca adds one mandatory argument: the path to the config file """
@@ -33,7 +33,6 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
     def _configure(self):
         try:
             self._load_configuration()
-            self._override_configuration()
             self.override_configuration()
             self._lock_configuration()
             self._debug_configuration()
@@ -44,6 +43,7 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
             sys.exit(-1)
 
     def _load_configuration(self):
+        """ Load the configuration from the specified file and convert it to a dynamic dotmap """
         raw = configuration.load_YAML(self.args.config)
         self.config = dotmap.DotMap(raw, _dynamic=True)
         log.debug(f"Configuration read from {c.path(self.args.config.name)}")
@@ -52,20 +52,17 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
         log.debug(f"Locking the configuration")
         configuration.make_static(self.config)
 
-    def override_with_warning(self, parameter, new_value, name):
-        log.warning(f"Overriding {c.param(name)} ({c.over(parameter)} -> {c.over(new_value)})")
-        self.config[name] = new_value
-
     def _debug_configuration(self):
         if self.args.debug:
             log.debug("Full config is")
             self.config.pprint()
 
     def _validate_configuration(self):
-        if self.schema is None:
+        if self._schema is None:
             log.debug("No config validation schema provided, skipping validation")
         else:
+            log.debug("Validating the configuration")
             try:
-                self.schema.validate(self.config)
+                self._schema.validate(self.config)
             except schema.SchemaError as e:
                 raise exceptions.ConfigurationError(e) from e

@@ -1,24 +1,26 @@
-[project]
-name = "scalyca"
-version = "0.0.8"
-authors = [
-    { name = "Martin Baláž", email = "martin.balaz@trojsten.sk" }
-]
-requires-python = ">=3.11.0"
-dependencies = [
-    'dotmap>=1.3.0',
-    'pathlib>=1.0.0',
-    'schema>=0.7.0',
-    'colorama>=0.4.0',
-    'pyyaml>=6.0.0',
-]
-description = "Simple Console Application with Logging, Yaml Configuration and Argparse"
-readme = "README.md"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
-
 [project.urls]
 "Homepage" = "https://github.com/sesquideus/scalyca"
+
+[tool.poetry]
+name = "scalyca"
+version = "0.2.2"
+description = "Simple Console Application with Logging, Yaml Configuration and Argparse"
+authors = ["Martin Baláž <martin.balaz@trojsten.sk>"]
+license = "GPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+argparse = "*"
+schema = "^0.7.7"
+argparsedirs = "^0.1.2"
+dotmap = "^1.3.30"
+colorama = "*"
+pyyaml = "*"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
