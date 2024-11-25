@@ -13,17 +13,14 @@ files = [
 
 [[package]]
 name = "argparsedirs"
-version = "0.1.2"
-description = "Readable and Writeable dir action for argparse"
+version = "0.2.0"
+description = "A simple extension for argparse to allow readable/writeable dir types"
 optional = false
-python-versions = "*"
+python-versions = "<4.0,>=3.11"
 files = [
-    {file = "argparsedirs-0.1.2-py3-none-any.whl", hash = "sha256:52f01d5cc5a65562b4df32d784f83f2688fe814ed601ec955bfa5a3aca89987c"},
-    {file = "argparsedirs-0.1.2.tar.gz", hash = "sha256:a10ba3b013c4d9c9f56f64b853fe6e7194b37f671dbc43ae74b5508562156087"},
+    {file = "argparsedirs-0.2.0-py3-none-any.whl", hash = "sha256:25411ff59e54cdc7a734acc17db371cac0183eec38d37802646af310ba4f0625"},
+    {file = "argparsedirs-0.2.0.tar.gz", hash = "sha256:043ac83e4e31ff3119b364e9429a2b8206018be99c919481ce2b3b7878f7420b"},
 ]
-
-[package.dependencies]
-argparse = ">=1.0.0"
 
 [[package]]
 name = "colorama"
@@ -180,4 +177,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "ce12a4136968334a88dcdd8b3e711888cefd608e2776d6529f9b6e20678071b7"
+content-hash = "16b530938f154f4766692f66c2717bc40eccc1aff9b81ffc5c2e410361f49f3d"

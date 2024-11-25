@@ -1,6 +1,8 @@
 import subprocess
 import pytest
 
+from scalyca import Scala
+
 
 @pytest.fixture
 def out():
@@ -13,3 +15,8 @@ class TestScala():
 
     def test_showcase_stderr_is_empty(self, out):
         assert len(out.stderr) == 0
+
+    def test_scala_is_abstract(self):
+        """ Scala should be abstract """
+        with pytest.raises(TypeError):
+            Scala()
