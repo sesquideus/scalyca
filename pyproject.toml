@@ -3,7 +3,7 @@
 
 [tool.poetry]
 name = "scalyca"
-version = "0.2.3"
+version = "0.2.4"
 description = "Simple Console Application with Logging, Yaml Configuration and Argparse"
 authors = ["Martin Baláž <martin.balaz@trojsten.sk>"]
 license = "GPLv3"

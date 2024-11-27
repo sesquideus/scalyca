@@ -1,5 +1,6 @@
 import abc
 import argparse
+import datetime
 import logging
 
 from . import colour as c
@@ -20,10 +21,12 @@ class Scala(metaclass=abc.ABCMeta):
     def __init__(self, **kwargs):
         """ Optionally override the application name and description """
         self._ok = False
+        self._started = datetime.datetime.now(datetime.UTC)
         self._description = kwargs.get('description', self._description)
         self._prog = kwargs.get('prog', self._prog)
-        self._success_message = kwargs.get('success_message', f"{c.script(self._prog)} finished successfully"
-                                           )
+        self._success_message = kwargs.get('success_message', f"{c.script(self._prog)} finished")
+        self._abort_message = kwargs.get('error_message', f"{c.script(self._prog)} aborted during runtime")
+
         self._argparser = argparse.ArgumentParser(
             prog=self._prog,
             description=self._description
@@ -91,10 +94,11 @@ class Scala(metaclass=abc.ABCMeta):
             log.error(f"Terminating due to a configuration error: {e}")
             self._ok = False
         finally:
+            run_time = datetime.datetime.now(datetime.UTC) - self._started
             if self._ok:
-                log.info(self._success_message)
+                log.info(f"{self._success_message} in {run_time}")
             else:
-                log.critical(f"{c.script(self._prog)} aborted during runtime")
+                log.critical(f"{self._abort_message} after {run_time}")
 
     def _finalize(self):
         self.finalize()
