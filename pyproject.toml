@@ -3,14 +3,14 @@
 
 [tool.poetry]
 name = "scalyca"
-version = "0.2.4"
+version = "0.2.5"
 description = "Simple Console Application with Logging, Yaml Configuration and Argparse"
 authors = ["Martin Baláž <martin.balaz@trojsten.sk>"]
 license = "GPLv3"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 argparse = "*"
 argparsedirs = "^0.2.0"
 schema = "^0.7.7"
