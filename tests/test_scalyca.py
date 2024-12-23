@@ -6,7 +6,7 @@ from scalyca import Scalyca
 
 @pytest.fixture
 def out():
-    return subprocess.run(['python', './show_scalyca.py', 'sample.yaml', 'foo', '5', '--debug'], capture_output=True)
+    return subprocess.run(['python', './show_scalyca.py', 'sample.yaml', 'foo', '0', '--debug'], capture_output=True)
 
 
 class TestScalyca():

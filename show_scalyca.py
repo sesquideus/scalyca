@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 import logging
 
 from schema import Schema, Or
@@ -37,8 +38,8 @@ class ScalycaShowcase(Scalyca):
 
     def purr(self, number):
         for i in range(0, number):
-            print("Purr... ", end="")
-        print()
+            print("Purr...", end=" " if i < number - 1 else "\n", flush=True)
+            time.sleep(0.5)
 
         if self.args.hungry:
             log.warning("The cat is hungry")

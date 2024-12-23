@@ -6,7 +6,7 @@ from scalyca import Scala
 
 @pytest.fixture
 def out():
-    return subprocess.run(['python', './show_scala.py', 'foo', '5', './LICENSE', '--debug'], capture_output=True)
+    return subprocess.run(['python', './show_scala.py', 'foo', '0', './LICENSE', '--debug'], capture_output=True)
 
 
 class TestScala():

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import time
 import argparse
 import logging
+
 from scalyca import Scala
 from scalyca import colour as c
 
@@ -30,7 +32,8 @@ class ScalaShowcase(Scala):
     def purr(self, number):
         """ This emulates something that the actual program would be doing... """
         for i in range(0, number):
-            print("Purr...", end=" " if i < number - 1 else "\n")
+            print("Purr...", end=" " if i < number - 1 else "\n", flush=True)
+            time.sleep(0.5)
 
         if self.args.hungry:
             log.warning("The cat is hungry")

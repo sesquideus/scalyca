@@ -86,14 +86,18 @@ class Scala(metaclass=abc.ABCMeta):
         try:
             self._initialize()
             self.main()
-            self._finalize()
+            self._ok = True
         except exceptions.PrerequisiteError as e:
             log.error(f"Terminating due to missing prerequisites: {e}")
             self._ok = False
         except exceptions.ConfigurationError as e:
             log.error(f"Terminating due to a configuration error: {e}")
             self._ok = False
+        except KeyboardInterrupt:
+            log.error(f"Interrupted by user")
+            self._ok = False
         finally:
+            self._finalize()
             run_time = datetime.datetime.now(datetime.UTC) - self._started
             if self._ok:
                 log.info(f"{self._success_message} in {run_time}")
@@ -102,4 +106,3 @@ class Scala(metaclass=abc.ABCMeta):
 
     def _finalize(self):
         self.finalize()
-        self._ok = True
