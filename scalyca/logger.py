@@ -43,7 +43,7 @@ def setup_log(name, *, output=None, fmt='[{asctime} {level}] {message}', timefmt
     handler.setFormatter(formatter)
 
     log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
     log.addHandler(handler)
 
     return log

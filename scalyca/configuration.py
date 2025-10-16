@@ -8,6 +8,9 @@ log = logging.getLogger('root')
 
 
 def load_YAML(file_object):
+    """
+    Load a YAML configuration file into a DotMap.
+    """
     try:
         config = yaml.safe_load(file_object)
     except yaml.composer.ComposerError as e:

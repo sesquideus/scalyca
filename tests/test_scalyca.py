@@ -9,7 +9,7 @@ def out():
     return subprocess.run(['python', './show_scalyca.py', 'sample.yaml', 'foo', '0', '--debug'], capture_output=True)
 
 
-class TestScalyca():
+class TestScalyca:
     def test_can_be_run_with_showcase(self, out):
         assert out.returncode == 0
 

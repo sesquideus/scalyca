@@ -17,7 +17,14 @@ log = logging.getLogger('root')
 
 class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
     """
-        Simple Console Application with Logging, Yaml Configuration and Argparse
+    Simple Console Application with Logging, Yaml Configuration and Argparse
+
+    Scalyca extends Scala with support for persistent configuration that is read from a YAML file.
+    An extra mandatory argument `config` is added and the file is parsed automatically.
+    Its contents are stored in a DotMap, so that they can be accessed more conveniently.
+
+    In `override_configuration` it is possible to override values from the configuration file
+    with command line arguments.
     """
     _app_name = 'Scalyca'
     _description = "Simple Configurable Application with Logging, Yaml file Configuration and Argparse"
@@ -26,7 +33,9 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
     _schema: schema.Schema | None = None
 
     def _add_default_arguments(self):
-        """ Scalyca adds one mandatory argument: the path to the config file """
+        """
+        Scalyca adds one mandatory argument to Scala's defaults: the path to the YAML config file.
+        """
         super()._add_default_arguments()
         self.add_argument('config', type=argparse.FileType('r'), help="main configuration file")
 
@@ -49,6 +58,9 @@ class Scalyca(scala.Scala, metaclass=abc.ABCMeta):
         log.debug(f"Configuration read from {c.path(self.args.config.name)}")
 
     def _lock_configuration(self):
+        """
+        Lock the configuration (set the DotMap's ``_dynamic`` to false recursively).
+        """
         log.debug(f"Locking the configuration")
         configuration.make_static(self.config)
 
